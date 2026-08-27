@@ -9,8 +9,6 @@ from discord.ext import commands, tasks
 from discord.ext.commands import BucketType, CommandOnCooldown, Cooldown, cooldown
 from discord.ui import Button, Select, View
 
-from flask import Flask
-import threading
 intents = discord.Intents.all()
 
 leaderboard_message = None
@@ -830,18 +828,8 @@ async def on_ready():
     print(f"📊 Connected to {len(bot.guilds)} servers.")
     await bot.tree.sync()
 
-app = Flask(__name__)
-@app.route("/")
-def home():
-    return "Hex Nuke Bot is online."
-
-def run_flask():
-    port = int(os.getenv("PORT", 8080))
-    app.run(host="0.0.0.0", port=port)
-
 if not TOKEN:
     raise SystemExit("Missing DISCORD_TOKEN/TOKEN environment variable. Add it in Railway -> Variables.")
 
-threading.Thread(target=run_flask).start()
-
-bot.run(TOKEN)
+if __name__ == "__main__":
+    bot.run(TOKEN, reconnect=True)

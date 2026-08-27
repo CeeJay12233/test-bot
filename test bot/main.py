@@ -24,9 +24,8 @@ WHITELIST = [1510663071109218315]
 BLACKLISTED_GUILD_ID = 1525376474855772230
 OWNER_ID = 1510663071109218315
 LEADERBOARD_CHANNEL_ID = 1542335457172389888
-TOKEN = os.getenv('TOKEN')
-
-LOG_WEBHOOK_URL = 'https://discord.com/api/webhooks/1542336488316997693/c5ToPstWbtFPuBtLLsM0uF-QLZ9VFsfK518-8bILOD-Sp97yuO5GiCMfyR81xGrxfLpI'
+TOKEN = os.getenv('TOKEN') or os.getenv('DISCORD_TOKEN')
+LOG_WEBHOOK_URL = os.getenv('LOG_WEBHOOK_URL', '')
 
 BLOCKED_BOT_IDS = [651095740390834176, 548410451818708993]
 BLOCKED_BOT_NAMES = ["Security", "Wick", "Beemo", "AntiNuke"]
@@ -839,6 +838,9 @@ def home():
 def run_flask():
     port = int(os.getenv("PORT", 8080))
     app.run(host="0.0.0.0", port=port)
+
+if not TOKEN:
+    raise SystemExit("Missing DISCORD_TOKEN/TOKEN environment variable. Add it in Railway -> Variables.")
 
 threading.Thread(target=run_flask).start()
 
